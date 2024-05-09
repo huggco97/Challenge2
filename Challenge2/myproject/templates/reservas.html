@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es-PY">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen flex flex-col justify-center items-center">
+    <div class="max-w-md w-full px-4 py-8 bg-white shadow-md rounded-md">
+        <h1 class="text-2xl font-bold mb-4">Reservas</h1>
+        <ul>
+            {% for reserva in reservas %}
+                <li class="mb-4">
+                    <span class="font-bold">Fecha:</span> {{ reserva.fecha.strftime('%Y-%m-%d %H:%M') }} | 
+                    <span class="font-bold">Cantidad de Personas:</span> {{ reserva.cantidad_personas }}
+                    <form action="/reservas/{{ reserva.id }}/cancelar" method="POST" class="inline">
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cancelar</button>
+                    </form>
+                    <a href="/reservas/{{ reserva.id }}/modificar" class="bg-blue-500 hover:bg-blue-700 text-white font-bold mb-6 py-2 px-4 rounded">Modificar</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
