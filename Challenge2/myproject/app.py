@@ -5,7 +5,7 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reservas.db'
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 migrate = Migrate()
 db.init_app(app)
 migrate.init_app(app, db)
@@ -50,7 +50,7 @@ def index():
             nueva_reserva = Reserva(fecha=fecha_hora, cantidad_personas=cantidad_personas)
             db.session.add(nueva_reserva)
             db.session.commit()
-            return redirect(url_for('index'))
+            return redirect('/')
         else:
             return "Lo sentimos, no hay mesas disponibles para esa fecha y hora."
     else:
@@ -68,10 +68,10 @@ def ver_reservas():
 def modificar_reserva(id):
     reserva = Reserva.query.get_or_404(id)
     if request.method == 'POST':
-        reserva.fecha = datetime.strptime(request.form['fecha'], '%Y-%m-%dT%H:%M')
+        reserva.fecha = datetime.combine( datetime.strptime(request.form['fecha'], '%Y-%m-%d'), datetime.strptime(request.form['hora'],'%H:%M').time())
         reserva.cantidad_personas = int(request.form['cantidad_personas'])
         db.session.commit()
-        return redirect(url_for('reservas'))
+        return redirect('/reservas')
     else:
         return render_template('modificar_reserva.html', reserva=reserva)
 
@@ -81,7 +81,11 @@ def cancelar_reserva(id):
     reserva = Reserva.query.get_or_404(id)
     db.session.delete(reserva)
     db.session.commit()
-    return redirect(url_for('reservas'))
+    return redirect('/reservas')
+
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
+    
     app.run(debug=True)

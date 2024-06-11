@@ -12,7 +12,7 @@
         <ul>
             {% for reserva in reservas %}
                 <li class="mb-4">
-                    <span class="font-bold">Fecha:</span> {{ reserva.fecha.strftime('%Y-%m-%d %H:%M') }} | 
+                    <span class="font-bold">Fecha:</span> {{ reserva.fecha.strftime('%d-%m-%Y %H:%M') }} | 
                     <span class="font-bold">Cantidad de Personas:</span> {{ reserva.cantidad_personas }}
                     <form action="/reservas/{{ reserva.id }}/cancelar" method="POST" class="inline">
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Cancelar</button>
